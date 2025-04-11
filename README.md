@@ -1,5 +1,11 @@
 # automated-daily-url-request
 
+This repository contains a Python script that automates the process of sending a daily HTTP request to a specified URL. The script is designed to run in a Docker container, making it easy to deploy and manage.
+
+The script run one time per day, at a random time within a specified time window during the day.
+
+The script can be configured to include cookies in the request, and it can also log the response for debugging purposes.
+
 ## Usage
 
 ### Build the Docker image
