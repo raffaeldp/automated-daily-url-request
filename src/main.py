@@ -48,7 +48,8 @@ logging.basicConfig(
 def get_random_time_today():
     """
     Calculates a random time between the specified window (TIME_WINDOW_START to TIME_WINDOW_END) today.
-    If the current time has passed the start time, adjust the start to now + 10 seconds.
+    If the current time has passed the window, then it calculates for the next day.
+    If the current time is within the window, start is adjusted to now + 10 seconds.
     """
     now = datetime.datetime.now()
 
@@ -56,23 +57,24 @@ def get_random_time_today():
     if EXECUTE_IN_5_SECONDS:
         return now + timedelta(seconds=5)
 
-    # Calculate today's start time
+    # Calculate today's start and end time for the window
     start_dt = now.replace(hour=TIME_WINDOW_START, minute=0, second=0, microsecond=0)
-
-    # Check if the current time has already passed the start time
-    if now >= start_dt:
-        start_dt = now + timedelta(seconds=10)  # Adjust the start time to now + 10 seconds
-
-    # Calculate the end time for today's window
     end_dt = now.replace(hour=TIME_WINDOW_END, minute=0, second=0, microsecond=0)
 
-    # If we are past today's end time, reset for the next day
+    # If we are past today's end time, shift the window to the next day.
     if now >= end_dt:
         start_dt += timedelta(days=1)
         end_dt += timedelta(days=1)
+    # Else if we are within the window but past the start, adjust start to now + 10 seconds.
+    elif now >= start_dt:
+        start_dt = now + timedelta(seconds=10)
 
-    # Randomly choose a time within the available window
+    # Calculate the available window in seconds.
     window_seconds = int((end_dt - start_dt).total_seconds())
+    if window_seconds <= 0:
+        raise ValueError(f"Invalid time window computed: start_dt={start_dt} end_dt={end_dt}")
+
+    # Randomly choose a time within the window
     random_offset = random.randint(0, window_seconds)
     target_time = start_dt + timedelta(seconds=random_offset)
 
@@ -91,7 +93,6 @@ def wait_until(target_time):
     else:
         logging.info(f"Target time {target_time} has already passed. Running action immediately.")
 
-
 def connect_using_browser():
     """
     Makes a GET request to the TARGET_URL with the provided cookies and headers to mimic a browser connection.
@@ -104,7 +105,6 @@ def connect_using_browser():
             logging.info(response.text[:10000])
     except Exception as e:
         logging.error(f"Error connecting to {TARGET_URL}: {e}")
-
 
 def daily_loop():
     """
