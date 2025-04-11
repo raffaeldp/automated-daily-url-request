@@ -21,6 +21,20 @@ docker run -e TARGET_URL="https://your_url.fr/cappuccino_assassino" \
            automated-daily-url-request
 ```
 
+### Docker compose
+
+```bash
+services:
+  automated-daily-url-request:
+    image: auto-connect:latest  # Replace with your image name if different
+    container_name: automated-daily-url-request
+    environment:
+      - TARGET_URL=https://your_url.fr/lirilì-larila
+      - COOKIES={"cookie1": "value1", "cookie2": "value2", "session": "abc123"}
+      - TIME_WINDOW_START=8
+      - TIME_WINDOW_END=22
+```
+
 ## Environment Variables
 | Variable Name         | Description                                                                         |
 |-----------------------|-------------------------------------------------------------------------------------|
