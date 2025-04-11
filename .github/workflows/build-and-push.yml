@@ -30,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/automated-daily-url-request
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=sha,prefix=sha-
             type=semver,pattern={{version}}
