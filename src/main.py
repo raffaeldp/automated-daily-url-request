@@ -5,7 +5,6 @@ import random
 import datetime
 import requests
 import logging
-import pytz
 from datetime import timedelta
 
 # --- Configuration from Environment Variables ---
@@ -29,9 +28,6 @@ USER_AGENT = os.getenv("USER_AGENT", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
                                      "AppleWebKit/537.36 (KHTML, like Gecko) "
                                      "Chrome/105.0.0.0 Safari/537.36")
 
-# Timezone setting from environment variable
-TIMEZONE = os.getenv("TIMEZONE", "UTC")  # Default to UTC if not provided
-
 headers = {
     "User-Agent": USER_AGENT
 }
@@ -49,20 +45,12 @@ logging.basicConfig(
 
 # --- Functions ---
 
-def get_timezone():
-    """ Returns the timezone object based on the TIMEZONE environment variable. """
-    try:
-        return pytz.timezone(TIMEZONE)
-    except pytz.UnknownTimeZoneError:
-        logging.error(f"Invalid timezone {TIMEZONE}. Falling back to UTC.")
-        return pytz.UTC
-
 def get_random_time_today():
     """
     Calculates a random time between the specified window (TIME_WINDOW_START to TIME_WINDOW_END) today.
     If the current time has passed the start time, adjust the start to now + 10 seconds.
     """
-    now = datetime.datetime.now(get_timezone())
+    now = datetime.datetime.now()
 
     # If debugging mode is enabled, set target time to now + 5 seconds
     if EXECUTE_IN_5_SECONDS:
@@ -95,7 +83,7 @@ def wait_until(target_time):
     """
     Makes the program wait until the target time is reached.
     """
-    now = datetime.datetime.now(get_timezone())
+    now = datetime.datetime.now()
     sleep_seconds = (target_time - now).total_seconds()
     if sleep_seconds > 0:
         logging.info(f"Waiting until {target_time}. Sleeping for {int(sleep_seconds)} seconds.")
@@ -124,7 +112,7 @@ def daily_loop():
     then waits until the next day at midnight.
     """
     while True:
-        now = datetime.datetime.now(get_timezone())
+        now = datetime.datetime.now()
         logging.info(f"New cycle started at {now}.")
 
         # Get a random target time within today's window or 5 seconds for debugging
