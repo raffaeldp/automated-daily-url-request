@@ -50,6 +50,7 @@ services:
 | TIME_WINDOW_END       | The end of the time window (in 24 hours) during which the request should be made.   |
 | EXECUTE_IN_5_SECONDS  | If set to "true", the script will execute the request after 5 seconds.              |
 | SHOW_RESULT           | If set to "true", the script will logs the 10 000 first characters of the response. |
+| TIMEZONE              | Set the timezone you want. (Europe/Paris etc...) default to UTC                     |
 | USER_AGENT (optional) | The User-Agent string to be used in the request.                                    |
 
 ## Commands
