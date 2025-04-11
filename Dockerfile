@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy the Python script and requirements.txt into the container
 COPY . /app/
 
+RUN apt install tzdata
+
 # Install the required Python dependencies
 RUN pip install --no-cache-dir -r src/requirements.txt
 
