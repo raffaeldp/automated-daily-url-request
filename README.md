@@ -22,6 +22,7 @@ docker run -e TARGET_URL="https://your_url.fr/cappuccino_assassino" \
            -e TIME_WINDOW_END="22" \
            -e EXECUTE_IN_5_SECONDS="true" \
            -e SHOW_RESULT="true" \
+           -e TIMEZONE="Europe/Paris" \
            -t \
            automated-daily-url-request
 ```
@@ -38,7 +39,7 @@ services:
       - 'COOKIES={"cookie1": "value1", "cookie2": "value2", "coookie3": "value3"}'
       - 'TIME_WINDOW_START=8'
       - 'TIME_WINDOW_END=22'
-      - 'EXECUTE_IN_5_SECONDS=true'
+      - 'TIMEZONE=Europe/Paris'
 ```
 
 ## Environment Variables
@@ -48,6 +49,7 @@ services:
 | COOKIES               | Cookies to be sent with the request in JSON format.                                 |
 | TIME_WINDOW_START     | The start of the time window (in 24 hours) during which the request should be made. |
 | TIME_WINDOW_END       | The end of the time window (in 24 hours) during which the request should be made.   |
+| TIMEZONE              | The wanted timezone, like Europe/Paris etc... Default to UTC                        |
 | EXECUTE_IN_5_SECONDS  | If set to "true", the script will execute the request after 5 seconds.              |
 | SHOW_RESULT           | If set to "true", the script will logs the 10 000 first characters of the response. |
 | USER_AGENT (optional) | The User-Agent string to be used in the request.                                    |
