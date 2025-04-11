@@ -14,23 +14,10 @@ docker run -e TARGET_URL="https://your_url.fr/cappuccino_assassino" \
            -e COOKIES='{"cookie1": "value1", "cookie2": "value2", "session": "abc123"}' \
            -e TIME_WINDOW_START="8" \
            -e TIME_WINDOW_END="22" \
-           -e USER_AGENT="Mozilla/5.0 ..." \
            -e EXECUTE_IN_5_SECONDS="true" \
            -e SHOW_RESULT="true" \
            -t \
            automated-daily-url-request
-```
-
-```bash
-docker run -e TARGET_URL="https://your_url.fr/cappuccino_assassino" \
-           -e COOKIES='{"cookie1": "value1", "cookie2": "value2", "session": "abc123"}' \
-           -e TIME_WINDOW_START="8" \
-           -e TIME_WINDOW_END="22" \
-           -e USER_AGENT="Mozilla/5.0 ..." \
-           -e EXECUTE_IN_5_SECONDS="true" \
-           -e SHOW_RESULT="true" \
-           -t \
-           ghcr.io/raffaeldp/automated-daily-url-request:sha-faee72d
 ```
 
 ### Docker compose
@@ -38,13 +25,14 @@ docker run -e TARGET_URL="https://your_url.fr/cappuccino_assassino" \
 ```bash
 services:
   automated-daily-url-request:
-    image: ghcr.io/raffaeldp/automated-daily-url-request:sha-faee72d  # Replace with your image name if different
+    image: 'ghcr.io/raffaeldp/automated-daily-url-request:latest'
     container_name: automated-daily-url-request
     environment:
-        - TARGET_URL=https://your_url.fr/lirilì-larila
-        - COOKIES={"cookie1": "value1", "cookie2": "value2", "session": "abc123"}
-        - TIME_WINDOW_START=8
-        - TIME_WINDOW_END=22
+      - 'TARGET_URL=https://your_url.fr/lirili-larila'
+      - 'COOKIES={"cookie1": "value1", "cookie2": "value2", "coookie3": "value3"}'
+      - 'TIME_WINDOW_START=8'
+      - 'TIME_WINDOW_END=22'
+      - 'EXECUTE_IN_5_SECONDS=true'
 ```
 
 ## Environment Variables
