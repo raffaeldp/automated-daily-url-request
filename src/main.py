@@ -33,6 +33,7 @@ headers = {
 
 # Check if debugging mode is enabled (execute in 5 seconds)
 EXECUTE_IN_5_SECONDS = os.getenv("EXECUTE_IN_5_SECONDS", "").lower() == "true"
+SHOW_RESULT = os.getenv("SHOW_RESULT", "").lower() == "true"
 
 
 # --- Functions ---
@@ -91,8 +92,9 @@ def connect_using_browser():
     try:
         response = requests.get(TARGET_URL, cookies=COOKIES, headers=headers)
         print(f"[{datetime.datetime.now()}] Connected to {TARGET_URL} - Status Code: {response.status_code}")
-        print(f"[{datetime.datetime.now()}] Response Content (first 10000 characters):")
-        print(response.text[:10000])  # Display first 500 characters of the response to avoid overwhelming output
+        if SHOW_RESULT:
+            print(f"[{datetime.datetime.now()}] Response Content (first 10000 characters):")
+            print(response.text[:10000])
     except Exception as e:
         print(f"[{datetime.datetime.now()}] Error connecting to {TARGET_URL}: {e}")
 
