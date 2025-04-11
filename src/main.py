@@ -4,6 +4,7 @@ import time
 import random
 import datetime
 import requests
+import logging
 from datetime import timedelta
 
 # --- Configuration from Environment Variables ---
@@ -15,7 +16,7 @@ cookies_env = os.getenv("COOKIES", "{}")
 try:
     COOKIES = json.loads(cookies_env)
 except json.JSONDecodeError as e:
-    print(f"{datetime.datetime.now()} - Error decoding COOKIES environment variable: {e}")
+    logging.error(f"Error decoding COOKIES environment variable: {e}")
     COOKIES = {}
 
 # Optional: Configure your daily time window by setting these as environment variables.
@@ -35,6 +36,12 @@ headers = {
 EXECUTE_IN_5_SECONDS = os.getenv("EXECUTE_IN_5_SECONDS", "").lower() == "true"
 SHOW_RESULT = os.getenv("SHOW_RESULT", "").lower() == "true"
 
+# --- Logging Configuration ---
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    handlers=[logging.StreamHandler()]
+)
 
 # --- Functions ---
 
@@ -79,10 +86,10 @@ def wait_until(target_time):
     now = datetime.datetime.now()
     sleep_seconds = (target_time - now).total_seconds()
     if sleep_seconds > 0:
-        print(f"[{now}] Waiting until {target_time}. Sleeping for {int(sleep_seconds)} seconds.")
+        logging.info(f"Waiting until {target_time}. Sleeping for {int(sleep_seconds)} seconds.")
         time.sleep(sleep_seconds)
     else:
-        print(f"[{now}] Target time {target_time} has already passed. Running action immediately.")
+        logging.info(f"Target time {target_time} has already passed. Running action immediately.")
 
 
 def connect_using_browser():
@@ -91,12 +98,12 @@ def connect_using_browser():
     """
     try:
         response = requests.get(TARGET_URL, cookies=COOKIES, headers=headers)
-        print(f"[{datetime.datetime.now()}] Connected to {TARGET_URL} - Status Code: {response.status_code}")
+        logging.info(f"Connected to {TARGET_URL} - Status Code: {response.status_code}")
         if SHOW_RESULT:
-            print(f"[{datetime.datetime.now()}] Response Content (first 10000 characters):")
-            print(response.text[:10000])
+            logging.info(f"Response Content (first 10000 characters):")
+            logging.info(response.text[:10000])
     except Exception as e:
-        print(f"[{datetime.datetime.now()}] Error connecting to {TARGET_URL}: {e}")
+        logging.error(f"Error connecting to {TARGET_URL}: {e}")
 
 
 def daily_loop():
@@ -106,11 +113,11 @@ def daily_loop():
     """
     while True:
         now = datetime.datetime.now()
-        print(f"\n[{now}] New cycle started.")
+        logging.info(f"New cycle started at {now}.")
 
         # Get a random target time within today's window or 5 seconds for debugging
         target_time = get_random_time_today()
-        print(f"[{now}] Target time today: {target_time}")
+        logging.info(f"Target time today: {target_time}")
 
         # Wait until the target time
         wait_until(target_time)
@@ -121,7 +128,7 @@ def daily_loop():
         # Wait until tomorrow at 00:01
         tomorrow = now + timedelta(days=1)
         midnight = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 0, 1)
-        print(f"[{now}] Waiting until next cycle at {midnight}")
+        logging.info(f"Waiting until next cycle at {midnight}")
         wait_until(midnight)
 
 
